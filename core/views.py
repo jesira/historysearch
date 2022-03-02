@@ -27,9 +27,9 @@ def searchView(request):
             # x= History.objects.none()
             for key in keys:
                 if start and end:
-                    x = y.filter(Q(result__contains=key)|Q(user__contains=key)).distinct()
+                    x = y.filter(Q(keyword__icontains=key)|Q(user__icontains=key)).distinct()
                 else:
-                    x = History.objects.filter(Q(result__contains=key)|Q(user__contains=key)).distinct() 
+                    x = History.objects.filter(Q(keyword__icontains=key)|Q(user__icontains=key)).distinct() 
                 for i in x:
                     if i.user not in user or i.searched_time not in searched_time or i.keyword not in keyword or i.result not in content:
                         user.append(i.user)        
