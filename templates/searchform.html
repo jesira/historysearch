@@ -115,13 +115,12 @@ $(document).ready(function(){
     e.preventDefault();
     $('tbody').text('');
     $('span').text('');
+
     //$('#time_range').text('');
-    
     var start_time = $("#start_time").val();
     var end_time = $("#end_time").val();
-
-
     var checkbox_value = "";
+    
     $(":checkbox").each(function () {
         var ischecked = $(this).is(":checked");
         if (ischecked) {
@@ -146,36 +145,24 @@ $(document).ready(function(){
           $('tbody').append('<td>'+ response.keyword[i]+'</td>');
           $('tbody').append('<td>'+ response.content[i]+'</td>');
           $('tbody').append('</tr>');
-           
-           //if checked keyword == response keyword 
-          if ($('#key1').is(":checked")){
-            var cbVal= $('#key1').val();
-            if (cbVal == response.keyword[i]){
-              $('#l1').append('<span>('+ response.occur[i]+' times found)</span>'); 
-            }
-          } 
-
-          if ($('#key2').is(":checked")){
-            var cbVal= $('#key2').val();
-            if (cbVal == response.keyword[i]){
-              $('#l2').append('<span>('+ response.occur[i]+' times found)</span>'); 
-            }
-          }
-
-          if ($('#key3').is(":checked")){
-            var cbVal= $('#key3').val();
-            if (cbVal == response.keyword[i]){
-              $('#l3').append('<span>('+ response.occur[i]+' times found)</span>'); 
-            }
-          }
-
+        }
+        if ($('#key1').is(":checked")){
+          var cbVal= $('#key1').val();
+          $('#l1').append('<span>('+ response.occur[cbVal]+' times found)</span>'); 
+        }
+        if ($('#key2').is(":checked")){
+          var cbVal= $('#key2').val();
+          $('#l2').append('<span>('+ response.occur[cbVal]+' times found)</span>'); 
+        }
+        if ($('#key3').is(":checked")){
+          var cbVal= $('#key3').val();
+          $('#l3').append('<span>('+ response.occur[cbVal]+' times found)</span>'); 
         }
       },
       error: function (res) {
         alert(res.status);                                                                                                                          
       }
     })
-  
   });
     });
  </script> 

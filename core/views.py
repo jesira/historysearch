@@ -23,8 +23,11 @@ def searchView(request):
             searched_time = []
             keyword = []
             content = []
-            oc = []
-            # x= History.objects.none()
+            oc = {}
+  
+
+
+            #x= History.objects.none()
             for key in keys:
                 if start and end:
                     x = y.filter(Q(keyword__icontains=key)|Q(user__icontains=key)).distinct()
@@ -38,9 +41,18 @@ def searchView(request):
                         content.append(i.result)
                         pat = i.keyword.lower()
                         txt = i.result.lower()
-                        oc.append(KMPSearch(pat, txt))
-            l = len(user)  
-            #print(oc) 
+                        p = KMPSearch(pat, txt)
+                        #oc.append(KMPSearch(pat, txt))
+                        
+                        if i.keyword in oc:
+                            oc[i.keyword] += p
+                        else:
+                            oc[i.keyword] = p
+                           
+                        
+            l = len(user)
+            #print(oc)  
+             
             context = {
                 'user' : user,
                 'searched_time': searched_time,
