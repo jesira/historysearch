@@ -147,7 +147,7 @@ $(document).ready(function(){
           $('tbody').append('<td>'+ response.content[i]+'</td>');
           $('tbody').append('</tr>');
         }
-        if (response.occur){
+        if (response.occur.keys()){
         if ($('#key1').is(":checked")){
           var cbVal= $('#key1').val();
           $('#l1').append('<span>('+ response.occur[cbVal]+' times found)</span>'); 
