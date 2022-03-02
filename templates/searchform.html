@@ -1,0 +1,185 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/docs/4.0/assets/img/favicons/favicon.ico">
+
+    <title>Search History</title>
+
+ <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <!-- <link href="./style.css" rel="stylesheet" > -->
+
+  </head>
+
+  <body>
+
+
+    <main role="main" class="container" style="margin-top: 5%;">
+      <h3>Search History</h3>
+
+      <div class="row">
+        <div class="col-sm-9" style="background-color:lavender;">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">User</th>
+                    <th scope="col">Searched time</th>
+                    <th scope="col">Key</th>
+                    <th scope="col">Content</th>
+                  </tr>
+                </thead>
+           <!-- to be done    -->
+
+                <tbody>
+                  {% for record in all_records %}
+                  <tr>      
+                    <th scope="row">{{record.user}}</th>
+                    <td>{{record.searched_time}}</td>
+                    <td>{{record.keyword}}</td>
+                    <td>{{record.result}}</td>
+                  </tr> 
+                  {% endfor %}
+                </tbody>
+               
+              </table>
+               <!-- to be done    --> 
+        </div>
+        <div class="col-sm-3" style="background-color:lavenderblush;">
+      
+      
+          <!-- checkbox1 -->
+        <form method="GET" action="" id="submitForm">
+            {% csrf_token %}
+            <h4>Keywords</h4>
+            <div class="form-check" >
+                <input class="form-check-input" type="checkbox" id="key1" name="key_name" value="django">
+                <label class="form-check-label" for="defaultCheck1" id="l1">
+                  django 
+                </label>
+            </div>
+            <div class="form-check" >
+                <input class="form-check-input" type="checkbox" id="key2" name="key_name" value="python">
+                <label class="form-check-label" for="defaultCheck1" id="l2">
+                  python 
+                </label>
+            </div>
+            <div class="form-check" >
+                <input class="form-check-input" type="checkbox" id="key3" name="key_name" value="react">
+                <label class="form-check-label" for="defaultCheck1" id="l3">
+                  react 
+                </label>
+            </div>
+             
+            <!-- user search -->
+            <h4>User</h4>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="defaultCheck1" name="key_name" value="Jesira">
+                <label class="form-check-label" for="defaultCheck1">
+                  Jesira
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="defaultCheck1" name="key_name" value="Jon">
+                <label class="form-check-label" for="defaultCheck1">
+                  Jon doe
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="defaultCheck1" name="key_name" value="Emily">
+                <label class="form-check-label" for="defaultCheck1">
+                  Emmily smith 
+                </label>
+            </div>
+
+            <div id="time_range">
+            <label for="start_time">From</label>
+            <input type="datetime-local" id="start_time">
+            <label for="end_time">To</label>
+            <input type="datetime-local" id="end_time">
+            </div>
+            <button type="submit" id="submit" >submit</button>
+        </form>
+        </div>
+      </div>
+    </main><!-- /.container -->
+<!-- JavaScript Bundle with Popper -->
+<script>
+$(document).ready(function(){ 
+  $('#submit').click(function(e){
+    e.preventDefault();
+    $('tbody').text('');
+    $('span').text('');
+    //$('#time_range').text('');
+    
+    var start_time = $("#start_time").val();
+    var end_time = $("#end_time").val();
+
+
+    var checkbox_value = "";
+    $(":checkbox").each(function () {
+        var ischecked = $(this).is(":checked");
+        if (ischecked) {
+            checkbox_value += $(this).val() + ",";
+        }
+    });
+    // alert(checkbox_value);
+    $.ajax({
+      url : "{% url 'searchform' %}" ,
+      type : "GET" ,
+      data : {
+        checkbox_value : checkbox_value,
+        start_time : start_time,
+        end_time : end_time,
+        
+      },
+      success: function (response) {
+        for (i=0; i< response.l; i++){
+          $('tbody').append('<tr>');
+          $('tbody').append('<td>'+ response.user[i]+'</td>');
+          $('tbody').append('<td>'+ response.searched_time[i]+'</td>');
+          $('tbody').append('<td>'+ response.keyword[i]+'</td>');
+          $('tbody').append('<td>'+ response.content[i]+'</td>');
+          $('tbody').append('</tr>');
+           
+           //if checked keyword == response keyword 
+          if ($('#key1').is(":checked")){
+            var cbVal= $('#key1').val();
+            if (cbVal == response.keyword[i]){
+              $('#l1').append('<span>('+ response.occur[i]+' times found)</span>'); 
+            }
+          } 
+
+          if ($('#key2').is(":checked")){
+            var cbVal= $('#key2').val();
+            if (cbVal == response.keyword[i]){
+              $('#l2').append('<span>('+ response.occur[i]+' times found)</span>'); 
+            }
+          }
+
+          if ($('#key3').is(":checked")){
+            var cbVal= $('#key3').val();
+            if (cbVal == response.keyword[i]){
+              $('#l3').append('<span>('+ response.occur[i]+' times found)</span>'); 
+            }
+          }
+
+        }
+      },
+      error: function (res) {
+        alert(res.status);                                                                                                                          
+      }
+    })
+  
+  });
+    });
+ </script> 
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+</html>
