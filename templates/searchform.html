@@ -147,6 +147,7 @@ $(document).ready(function(){
           $('tbody').append('<td>'+ response.content[i]+'</td>');
           $('tbody').append('</tr>');
         }
+        if (response.occur){
         if ($('#key1').is(":checked")){
           var cbVal= $('#key1').val();
           $('#l1').append('<span>('+ response.occur[cbVal]+' times found)</span>'); 
@@ -159,7 +160,8 @@ $(document).ready(function(){
           var cbVal= $('#key3').val();
           $('#l3').append('<span>('+ response.occur[cbVal]+' times found)</span>'); 
         }
-      },
+      }
+    },
       error: function (res) {
         alert(res.status);                                                                                                                          
       }
